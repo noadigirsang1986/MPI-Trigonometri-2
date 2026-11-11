@@ -1,0 +1,714 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Trigonometri 2 – Sudut Berelasi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Nunito+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: papan tulis "lingkaran satuan" — slide judul penuh, lalu rel menu kiri + panel isi. Tema gelap tunggal yang disengaja. */
+:root{
+  --bg:#0D1828; --panel:#14243A; --panel2:#1A2E48; --line:#2B4262;
+  --fg:#ECF2F9; --muted:#9AAEC6; --accent:#F5B841; --accent-ink:#1B1406;
+  --q1:#4FD1A1; --q2:#F2B33D; --q3:#FF7A6B; --q4:#7FA8FF;
+  --ok:#4FD1A1; --bad:#FF7A6B;
+  --f-display:"Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --f-body:"Nunito Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  background-image:radial-gradient(circle at 1px 1px, rgba(127,168,255,.10) 1px, transparent 0);background-size:28px 28px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+
+/* ===== Slide 1 ===== */
+#cover{min-height:100%;display:grid;place-items:center;padding-block:32px;
+  padding-left:max(16px, env(safe-area-inset-left,0px));padding-right:max(16px, env(safe-area-inset-right,0px))}
+.cover-wrap{width:100%;max-width:1080px;display:grid;grid-template-columns:1.4fr .6fr;gap:40px;align-items:center}
+.cover-wrap > div:first-child{min-width:0}
+.eyebrow{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.cover-title{font-size:clamp(1.55rem, 5.4vw, 3.9rem);font-weight:800;letter-spacing:-.02em;margin-top:10px;white-space:nowrap}
+.cover-title span{color:var(--accent)}
+.cover-sub{font-size:1.15rem;color:var(--muted);margin-top:12px;max-width:34ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.9rem;background:var(--panel)}
+.dev{margin-top:28px;border-top:1px dashed var(--line);padding-top:16px;display:grid;gap:2px}
+.dev small{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.dev b{font-size:1.15rem}
+.dev span{color:var(--muted);font-size:.92rem;word-break:break-all}
+.btn-start{margin-top:26px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:14px;padding:14px 26px;font-weight:800;font-size:1.05rem;box-shadow:0 6px 0 #B9851E;transition:transform .12s, box-shadow .12s}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 8px 0 #B9851E}
+.btn-start:active{transform:translateY(4px);box-shadow:0 2px 0 #B9851E}
+.cover-art{max-width:420px;width:100%;justify-self:center}
+.cover-art svg{width:100%;height:auto;display:block}
+.spin{transform-origin:150px 150px;animation:spin 9s linear infinite}
+@keyframes spin{to{transform:rotate(-360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+
+/* ===== Slide 2 ===== */
+#app{height:100%;display:grid;grid-template-columns:250px 1fr}
+.rail{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:6px;
+  padding-block:20px;padding-left:max(14px, env(safe-area-inset-left,0px));padding-right:14px;overflow-y:auto}
+.rail-head{padding:4px 8px 16px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.rail-head b{font-family:var(--f-display);font-size:1.35rem;display:block}
+.rail-head span{font-size:.8rem;color:var(--muted)}
+.nav{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:transparent;border:1px solid transparent;border-radius:12px;padding:12px 12px;font-weight:700;color:var(--muted);transition:background .15s,color .15s}
+.nav:hover{background:var(--panel2);color:var(--fg)}
+.nav[aria-current="true"]{background:var(--panel2);color:var(--fg);border-color:var(--line)}
+.nav[aria-current="true"] .ico{background:var(--accent);color:var(--accent-ink)}
+.ico{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--bg);font-family:var(--f-mono);font-weight:700;font-size:.85rem}
+.ico svg{width:18px;height:18px}
+.rail-foot{margin-top:auto;padding-top:12px}
+.nav.home{color:var(--muted);font-weight:600}
+.main{overflow-y:auto;padding-block:28px;padding-left:28px;padding-right:max(28px, env(safe-area-inset-right,0px));min-width:0}
+.view{max-width:900px;margin:0 auto;animation:fade .3s ease}
+@keyframes fade{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.view{animation:none}}
+.view-head{margin-bottom:22px}
+.view-head h2{font-size:clamp(1.6rem,3.4vw,2.3rem);font-weight:800;margin-top:6px}
+.view-head p{color:var(--muted);margin:8px 0 0;max-width:62ch}
+
+/* TP cards */
+.tp-list{display:grid;gap:14px}
+.tp{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.qbadge{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:1.25rem;color:#0D1828}
+.tp p{margin:0;font-weight:600}
+.tp small{color:var(--muted);font-family:var(--f-mono);font-size:.78rem}
+.note{margin-top:20px;border-left:4px solid var(--accent);background:var(--panel);padding:14px 18px;border-radius:0 12px 12px 0;color:var(--muted)}
+.note b{color:var(--fg)}
+
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.tab{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 16px;font-weight:700;font-size:.92rem;color:var(--muted)}
+.tab[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tab .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:1px}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px 22px}
+.card + .card{margin-top:16px}
+.card h3{font-size:1.25rem;margin-bottom:10px}
+.card p{margin:0 0 10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid2 > *{min-width:0}
+
+.formula{display:grid;gap:8px;margin:12px 0}
+.f{font-family:var(--f-mono);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:.98rem;overflow-x:auto;white-space:nowrap}
+.f em{font-style:normal;font-weight:700}
+.pos{color:var(--q1)} .neg{color:var(--q3)}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:480px;font-variant-numeric:tabular-nums}
+th,td{padding:10px 12px;text-align:center;border-bottom:1px solid var(--line)}
+th{font-family:var(--f-mono);font-size:.82rem;letter-spacing:.06em;color:var(--muted);background:var(--panel2)}
+td{font-family:var(--f-mono)}
+tr:last-child td{border-bottom:0}
+td:first-child{color:var(--accent);font-weight:700}
+
+.quad-mini{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:340px}
+.qm{border-radius:12px;padding:12px;color:#0D1828;font-weight:800}
+.qm span{display:block;font-family:var(--f-mono);font-weight:700;font-size:.8rem;opacity:.75}
+
+/* contoh soal */
+.ex{border:1px dashed var(--line);border-radius:14px;padding:14px 16px;margin-top:12px;background:var(--bg)}
+.ex-q{font-weight:700}
+.ex-q .tag{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;color:var(--accent);display:block;margin-bottom:2px}
+.ex-btn{margin-top:10px;background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:10px;padding:6px 12px;font-weight:700;font-size:.88rem}
+.ex-sol{margin-top:10px;font-family:var(--f-mono);font-size:.92rem;display:grid;gap:4px;overflow-x:auto}
+.ex-sol div{white-space:nowrap}
+.frac{display:inline-flex;flex-direction:column;align-items:stretch;vertical-align:middle;text-align:center;margin:0 .12em;line-height:1.2;font-size:.9em}
+.frac>span{padding:0 .22em;white-space:nowrap}
+.frac>span:first-child{border-bottom:1.6px solid currentColor;padding-bottom:1px}
+.frac>span:last-child{padding-top:1px}
+.ex-sol div,.f,.feedback .ex-sol div{line-height:2.1}
+.ex.tri-ex{border-style:solid;border-color:var(--accent)}
+.ex-tri{display:grid;grid-template-columns:minmax(0,250px) minmax(0,1fr);gap:16px;align-items:center;margin-top:10px}
+.ex-tri svg{width:100%;height:auto;display:block;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.ex-tri .ex-sol{margin-top:0}
+.hint{font-size:.85rem;color:var(--muted);font-family:var(--f-body);white-space:normal!important}
+@media (max-width:640px){.ex-tri{grid-template-columns:1fr}.ex-tri svg{max-width:280px}}
+
+/* explorer */
+.explorer{display:grid;grid-template-columns:minmax(0,320px) 1fr;gap:20px;align-items:center}
+.explorer svg{width:100%;height:auto;display:block}
+.slider-row{display:flex;align-items:center;gap:12px;margin:10px 0 4px}
+input[type=range]{flex:1;accent-color:var(--accent);min-width:0}
+.big-angle{font-family:var(--f-display);font-size:2.4rem;font-weight:800;font-variant-numeric:tabular-nums;min-width:4ch}
+.vals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.val{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;min-width:0}
+.val small{display:block;color:var(--muted);font-family:var(--f-mono);font-size:.75rem}
+.val b{font-family:var(--f-mono);font-size:1.05rem;word-break:break-word}
+.qpill{display:inline-block;border-radius:999px;padding:4px 12px;font-weight:800;color:#0D1828;font-size:.85rem}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.presets button{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px 10px;font-family:var(--f-mono);font-size:.82rem}
+.presets button:hover{border-color:var(--accent)}
+.rel-line{margin-top:10px;font-family:var(--f-mono);font-size:.9rem;color:var(--muted)}
+
+/* quiz */
+.progress{height:8px;background:var(--panel2);border-radius:999px;overflow:hidden;margin-bottom:18px}
+.progress i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.qhead{display:flex;justify-content:space-between;gap:12px;font-family:var(--f-mono);font-size:.82rem;color:var(--muted);margin-bottom:8px;flex-wrap:wrap}
+.qtext{font-size:1.25rem;font-weight:700;margin-bottom:16px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts .opt:last-child:nth-child(odd){grid-column:1/-1}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:12px 14px;font-family:var(--f-mono);font-size:1rem;transition:border-color .15s, transform .1s}
+.opt:hover:not(:disabled){border-color:var(--accent);transform:translateY(-1px)}
+.opt .lt{flex:none;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--panel2);font-weight:700;font-size:.85rem}
+.opt.correct{border-color:var(--ok);background:rgba(79,209,161,.12)}
+.opt.wrong{border-color:var(--bad);background:rgba(255,122,107,.12)}
+.opt:disabled{cursor:default}
+.feedback{margin-top:16px;border-radius:14px;padding:14px 16px;background:var(--bg);border:1px solid var(--line)}
+.feedback b.okt{color:var(--ok)} .feedback b.badt{color:var(--bad)}
+.feedback .ex-sol{margin-top:6px}
+.qnav{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:12px;padding:10px 18px;font-weight:800}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.score{text-align:center;padding:10px 0}
+.score .num{font-family:var(--f-display);font-size:4.5rem;font-weight:800;color:var(--accent);line-height:1}
+.recap{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:16px 0}
+.recap span{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;color:#0D1828}
+
+/* refleksi */
+.field{display:grid;gap:6px;margin-bottom:14px}
+.field label{font-weight:700}
+input[type=text],textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--fg);font:inherit}
+textarea{min-height:80px;resize:vertical}
+.rf{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.rf:last-of-type{border-bottom:0}
+.rf p{margin:0;font-weight:600;min-width:0}
+.lv{display:flex;gap:6px}
+.lv button{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:6px 10px;font-weight:700;font-size:.85rem;color:var(--muted)}
+.lv button[aria-pressed="true"]{color:#0D1828;border-color:transparent}
+.lv button[data-v="1"][aria-pressed="true"]{background:var(--q3)}
+.lv button[data-v="2"][aria-pressed="true"]{background:var(--q2)}
+.lv button[data-v="3"][aria-pressed="true"]{background:var(--q1)}
+.summary{margin-top:16px;border:2px solid var(--accent);border-radius:18px;padding:18px 20px;background:var(--panel)}
+.summary h3{color:var(--accent)}
+.summary ul{margin:8px 0;padding-left:20px}
+.error{color:var(--bad);font-weight:700;margin-top:8px}
+
+/* sound controls */
+.snd{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));top:calc(12px + env(safe-area-inset-top,0px));display:flex;gap:6px;z-index:20;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.snd button{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:7px 11px;font-weight:800;font-size:.82rem;color:var(--muted)}
+.snd button svg{width:16px;height:16px}
+.snd button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.eq{display:inline-flex;gap:2px;align-items:flex-end;height:14px}
+.eq i{width:3px;background:currentColor;border-radius:2px;height:4px}
+.snd button[aria-pressed="true"] .eq i{animation:eq .6s ease-in-out infinite alternate}
+.eq i:nth-child(2){animation-delay:.15s!important}.eq i:nth-child(3){animation-delay:.3s!important}
+@keyframes eq{from{height:3px}to{height:14px}}
+@media (prefers-reduced-motion:reduce){.snd button .eq i{animation:none!important;height:8px}}
+
+/* responsive */
+@media (max-width:860px){
+  .cover-wrap{grid-template-columns:1fr}
+  .cover-art{max-width:280px;order:-1}
+  .grid2,.explorer{grid-template-columns:1fr}
+  .explorer svg{max-width:300px;margin:0 auto}
+}
+@media (max-width:640px){
+  #app{grid-template-columns:76px 1fr}
+  .rail{padding-left:max(8px, env(safe-area-inset-left,0px));padding-right:8px}
+  .rail-head{display:none}
+  .nav{flex-direction:column;gap:4px;padding:10px 4px;font-size:.66rem;text-align:center;line-height:1.2}
+  .main{padding-left:16px;padding-right:max(16px, env(safe-area-inset-right,0px));padding-block:20px}
+  .opts{grid-template-columns:1fr}
+  .main{padding-top:70px}
+  #cover{padding-top:76px}
+  .tp{grid-template-columns:1fr}
+  .rf{grid-template-columns:1fr}
+  .card{padding:16px}
+}
+</style>
+
+<!-- ============ SLIDE 1: JUDUL ============ -->
+<section id="cover">
+  <div class="cover-wrap">
+    <div>
+      <div class="eyebrow">Media Pembelajaran Interaktif · Matematika</div>
+      <h1 class="cover-title">TRIGONOMETRI <span>- 2</span></h1>
+      <p class="cover-sub">Perbandingan trigonometri sudut-sudut berelasi di Kuadran I, II, III, dan IV.</p>
+      <div class="chips">
+        <span class="chip">Kelas X SMA</span>
+        <span class="chip">Fase E</span>
+        <span class="chip">Sudut Berelasi</span>
+      </div>
+      <div class="dev">
+        <small>Dikembangkan oleh</small>
+        <b>Noadi Girsang, S.Pd.Gr</b>
+        <span>SMAN 2 Tangerang · noadigirsang21@guru.sma.belajar.id</span>
+      </div>
+      <button class="btn-start" id="startBtn">Mulai Belajar →</button>
+    </div>
+    <div class="cover-art" aria-hidden="true">
+      <svg viewBox="0 0 300 300">
+        <path d="M150 150 L150 20 A130 130 0 0 1 280 150 Z" fill="#4FD1A1" opacity=".16"/>
+        <path d="M150 150 L20 150 A130 130 0 0 1 150 20 Z" fill="#F2B33D" opacity=".16"/>
+        <path d="M150 150 L150 280 A130 130 0 0 1 20 150 Z" fill="#FF7A6B" opacity=".16"/>
+        <path d="M150 150 L280 150 A130 130 0 0 1 150 280 Z" fill="#7FA8FF" opacity=".16"/>
+        <circle cx="150" cy="150" r="130" fill="none" stroke="#ECF2F9" stroke-width="2"/>
+        <line x1="8" y1="150" x2="292" y2="150" stroke="#9AAEC6" stroke-width="1.5"/>
+        <line x1="150" y1="8" x2="150" y2="292" stroke="#9AAEC6" stroke-width="1.5"/>
+        <text x="222" y="92" fill="#4FD1A1" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="26" text-anchor="middle">I</text>
+        <text x="78" y="92" fill="#F2B33D" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="26" text-anchor="middle">II</text>
+        <text x="78" y="226" fill="#FF7A6B" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="26" text-anchor="middle">III</text>
+        <text x="222" y="226" fill="#7FA8FF" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="26" text-anchor="middle">IV</text>
+        <g class="spin">
+          <line x1="150" y1="150" x2="262.6" y2="85" stroke="#F5B841" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="262.6" cy="85" r="8" fill="#F5B841"/>
+        </g>
+        <circle cx="150" cy="150" r="5" fill="#ECF2F9"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2: MENU ============ -->
+<div id="app" hidden>
+  <nav class="rail" aria-label="Menu pembelajaran">
+    <div class="rail-head"><b>Trigonometri - 2</b><span>Kelas X · Sudut Berelasi</span></div>
+    <button class="nav" data-view="tujuan"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg></span>Tujuan Pembelajaran</button>
+    <button class="nav" data-view="materi"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H4z"/><path d="M20 5h-4a2 2 0 0 0-2 2"/><path d="M20 5v13h-6"/></svg></span>Materi &amp; Contoh Soal</button>
+    <button class="nav" data-view="latihan"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg></span>Latihan Soal</button>
+    <button class="nav" data-view="refleksi"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span>Refleksi Pembelajaran</button>
+    <div class="rail-foot"><button class="nav home" id="homeBtn"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg></span>Beranda</button></div>
+  </nav>
+  <main class="main" id="main"></main>
+</div>
+
+<div class="snd" role="group" aria-label="Pengaturan suara">
+  <button type="button" id="musBtn" aria-pressed="false" title="Musik latar"><span class="eq"><i></i><i></i><i></i></span>Musik</button>
+  <button type="button" id="sfxBtn" aria-pressed="true" title="Bunyi tombol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>Efek</button>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const main=$('#main');
+
+/* ===== Pecahan bersusun (tanpa garis miring) ===== */
+const FNUM='(?:√\\([^()]*\\)|\\([^()]*\\)|[0-9A-Za-zα²]+)';
+const FRE=new RegExp('(−?)('+FNUM+')\\s*/\\s*(−?'+FNUM+')','g');
+const FR=(a,b)=>`<span class="frac"><span>${a}</span><span>${b}</span></span>`;
+function fstrip(s){return (s.startsWith('(')&&s.endsWith(')'))?s.slice(1,-1):s;}
+function fracHTML(t){
+  return esc(t).replace(FRE,(m,neg,a,b)=>neg+FR(fstrip(a),fstrip(b))).replace(/½/g,FR('1','2')).replace(/⅓/g,FR('1','3'));
+}
+function fracify(root){
+  if(!root||root.closest&&root.closest('svg,textarea,.frac'))return;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentElement;if(!p||p.closest('svg,textarea,script,style,.frac'))return NodeFilter.FILTER_REJECT;return /[\/½⅓]/.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_SKIP;}});
+  const list=[];while(w.nextNode())list.push(w.currentNode);
+  list.forEach(n=>{const h=fracHTML(n.nodeValue);if(h===esc(n.nodeValue))return;const s=document.createElement('span');s.innerHTML=h;n.replaceWith(...s.childNodes);});
+}
+new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1)fracify(n);else if(n.nodeType===3&&n.parentElement)fracify(n.parentElement);}))).observe(main,{childList:true,subtree:true});
+const QC={1:'var(--q1)',2:'var(--q2)',3:'var(--q3)',4:'var(--q4)'};
+
+/* ===== AUDIO (Web Audio, tanpa file) ===== */
+let AC=null,master,musG,sfxG,NB=null,musicOn=false,sfxOn=true,timer=null,step=0,nextT=0;
+const BPM=126, SPS=60/BPM/4;
+function ac(){
+  try{
+    if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();
+      master=AC.createGain();master.gain.value=.9;master.connect(AC.destination);
+      musG=AC.createGain();musG.gain.value=.28;musG.connect(master);
+      sfxG=AC.createGain();sfxG.gain.value=.55;sfxG.connect(master);
+      NB=AC.createBuffer(1,AC.sampleRate*.5,AC.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;}
+    if(AC.state==='suspended')AC.resume();return AC;
+  }catch(e){return null;}
+}
+const mf=m=>440*Math.pow(2,(m-69)/12);
+function tone(f,t,d,type,vol,dest,f2){const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(dest);o.start(t);o.stop(t+d+.03);}
+function noise(t,d,vol,hp,dest){const s=AC.createBufferSource();s.buffer=NB;const f=AC.createBiquadFilter();f.type='highpass';f.frequency.value=hp;const g=AC.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(f);f.connect(g);g.connect(dest);s.start(t);s.stop(t+d+.02);}
+function kick(t){tone(160,t,.22,'sine',.9,musG,42);}
+/* progresi semangat: C – G – Am – F */
+const CH=[[48,[0,4,7]],[43,[0,4,7]],[45,[0,3,7]],[41,[0,4,7]]];
+const LEAD=[[0,12],[3,16],[6,19],[8,16],[10,14],[12,12],[14,16]];
+function playStep(s,t){
+  const bar=Math.floor(s/16),k=s%16,[root,tri]=CH[bar];
+  if(k%4===0)kick(t);
+  if(k%4===2)noise(t,.05,.35,7000,musG);
+  if(k===4||k===12)noise(t,.14,.45,1800,musG);
+  if([0,3,6,8,10,14].includes(k))tone(mf(root-12+(k===10?12:0)),t,SPS*1.6,'triangle',.5,musG);
+  if(k%2===0){const n=root+12+tri[(k/2)%3]+(k%8===6?12:0);tone(mf(n),t,SPS*1.4,'square',.07,musG);}
+  if(bar%2===0||k<8){const L=LEAD.find(x=>x[0]===k);if(L)tone(mf(root+12+L[1]+(bar===2?-1:0)),t,SPS*1.8,'sawtooth',.06,musG);}
+}
+function sched(){while(nextT<AC.currentTime+.12){playStep(step,nextT);nextT+=SPS;step=(step+1)%64;}}
+function startMusic(){if(musicOn||!ac())return;musicOn=true;step=0;nextT=AC.currentTime+.06;timer=setInterval(sched,25);updSnd();}
+function stopMusic(){musicOn=false;clearInterval(timer);updSnd();}
+function sfx(kind){
+  if(!sfxOn||!ac())return;const t=AC.currentTime+.01;
+  if(kind==='click'){tone(1046,t,.06,'triangle',.35,sfxG);tone(1568,t+.03,.07,'triangle',.22,sfxG);}
+  else if(kind==='tick'){tone(1800,t,.025,'square',.06,sfxG);}
+  else if(kind==='tab'){tone(660,t,.07,'triangle',.3,sfxG,990);}
+  else if(kind==='start'){[60,64,67,72,76,79].forEach((m,i)=>tone(mf(m+12),t+i*.07,.22,'square',.13,sfxG));}
+  else if(kind==='ok'){tone(mf(76),t,.12,'square',.16,sfxG);tone(mf(84),t+.1,.28,'square',.16,sfxG);tone(mf(88),t+.1,.28,'triangle',.2,sfxG);}
+  else if(kind==='bad'){tone(220,t,.16,'sawtooth',.18,sfxG,180);tone(165,t+.15,.26,'sawtooth',.18,sfxG,120);}
+  else if(kind==='fanfare'){[[72,0],[76,.12],[79,.24],[84,.36],[79,.52],[84,.62]].forEach(([m,d],i)=>tone(mf(m),t+d,i>4?.6:.16,'square',.14,sfxG));noise(t+.62,.4,.25,5000,sfxG);}
+}
+function updSnd(){$('#musBtn').setAttribute('aria-pressed',musicOn);$('#sfxBtn').setAttribute('aria-pressed',sfxOn);}
+$('#musBtn').onclick=()=>{musicOn?stopMusic():startMusic();};
+$('#sfxBtn').onclick=()=>{sfxOn=!sfxOn;updSnd();if(sfxOn)sfx('click');};
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.classList.contains('opt')||b.id==='startBtn'||b.closest('.snd'))return;sfx(b.classList.contains('tab')||b.classList.contains('nav')?'tab':'click');},true);
+let lastTick=0;document.addEventListener('input',e=>{if(e.target.type==='range'){const n=performance.now();if(n-lastTick>45){lastTick=n;sfx('tick');}}});
+
+$('#startBtn').onclick=()=>{ startMusic(); sfx('start'); $('#cover').hidden=true; $('#app').hidden=false; go('tujuan'); };
+$('#homeBtn').onclick=()=>{ $('#app').hidden=true; $('#cover').hidden=false; };
+document.querySelectorAll('.nav[data-view]').forEach(b=>b.onclick=()=>go(b.dataset.view));
+
+function go(v){
+  document.querySelectorAll('.nav[data-view]').forEach(b=>b.setAttribute('aria-current', b.dataset.view===v));
+  ({tujuan:renderTujuan,materi:renderMateri,latihan:renderLatihan,refleksi:renderRefleksi})[v]();
+  main.scrollTop=0;
+}
+
+/* ---------- TUJUAN ---------- */
+const TP=[
+ [1,'Menentukan nilai perbandingan trigonometri sudut-sudut yang berelasi di kuadran I.','Relasi (90° − α)'],
+ [2,'Menentukan nilai perbandingan trigonometri sudut-sudut yang berelasi di kuadran II.','Relasi (180° − α) dan (90° + α)'],
+ [3,'Menentukan nilai perbandingan trigonometri sudut-sudut yang berelasi di kuadran III.','Relasi (180° + α) dan (270° − α)'],
+ [4,'Menentukan nilai perbandingan trigonometri sudut-sudut yang berelasi di kuadran IV.','Relasi (360° − α), (270° + α), dan (−α)']
+];
+function renderTujuan(){
+  main.innerHTML=`<div class="view">
+   <div class="view-head"><div class="eyebrow">Menu 1</div><h2>Tujuan Pembelajaran</h2>
+   <p>Setelah mempelajari media ini, peserta didik mampu:</p></div>
+   <div class="tp-list">${TP.map(t=>`<div class="tp"><div class="qbadge" style="background:${QC[t[0]]}">K${['','I','II','III','IV'][t[0]]}</div>
+   <div><p>${t[1]}</p><small>${t[2]}</small></div></div>`).join('')}</div>
+   <div class="note"><b>Alur belajar:</b> pelajari materi dan contoh soal tiap kuadran, coba penjelajah sudut, kerjakan latihan soal, lalu isi refleksi pembelajaran.</div>
+  </div>`;
+}
+
+/* ---------- MATERI ---------- */
+const MTABS=[['konsep','Konsep Dasar',0],['k1','Kuadran I',1],['k2','Kuadran II',2],['k3','Kuadran III',3],['k4','Kuadran IV',4],['jelajah','Penjelajah Sudut',0]];
+let mtab='konsep';
+function ex(tag,q,steps){
+  return `<div class="ex"><div class="ex-q"><span class="tag">${tag}</span>${q}</div>
+  <button class="ex-btn" type="button">Lihat Pembahasan</button>
+  <div class="ex-sol" hidden>${steps.map(s=>`<div>${s}</div>`).join('')}</div></div>`;
+}
+/* contoh soal bergambar segitiga siku-siku pada bidang koordinat */
+const QCOL={1:'#4FD1A1',2:'#F2B33D',3:'#FF7A6B',4:'#7FA8FF'};
+function triSVG(q,yL,xL,rL){
+  const sx=(q===1||q===4)?1:-1, sy=(q===1||q===2)?1:-1, O=[140,105], P=[O[0]+sx*92,O[1]-sy*62], F=[P[0],O[1]], c=QCOL[q];
+  const th=Math.atan2(sy*62,sx*92), thd=(th*180/Math.PI+360)%360, r=24;
+  const ax=O[0]+r*Math.cos(th), ay=O[1]-r*Math.sin(th), big=thd>180?1:0;
+  const mid=th<0?th+Math.PI*0:th; const lm=(thd/2)*Math.PI/180;
+  const sq=`M${F[0]-sx*10} ${F[1]} L${F[0]-sx*10} ${F[1]-sy*10} L${F[0]} ${F[1]-sy*10}`;
+  const yLab=`<text x="${P[0]+sx*8}" y="${(P[1]+F[1])/2+4}" text-anchor="${sx>0?'start':'end'}" fill="${c}" font-size="12" font-family="JetBrains Mono, monospace" font-weight="700">${yL}</text>`;
+  const xLab=`<text x="${(O[0]+F[0])/2}" y="${sy>0?O[1]+17:O[1]-8}" text-anchor="middle" fill="${c}" font-size="12" font-family="JetBrains Mono, monospace" font-weight="700">${xL}</text>`;
+  const rLab=`<text x="${(O[0]+P[0])/2-sx*14}" y="${(O[1]+P[1])/2-sy*12+4}" text-anchor="${sx>0?'end':'start'}" fill="#ECF2F9" font-size="12" font-family="JetBrains Mono, monospace" font-weight="700">${rL}</text>`;
+  return `<svg viewBox="0 0 280 210" role="img" aria-label="Segitiga siku-siku di kuadran ${['','I','II','III','IV'][q]}">
+   <line x1="14" y1="${O[1]}" x2="266" y2="${O[1]}" stroke="#9AAEC6"/><line x1="${O[0]}" y1="14" x2="${O[0]}" y2="196" stroke="#9AAEC6"/>
+   <text x="264" y="${O[1]-6}" fill="#9AAEC6" font-size="11" font-family="monospace" text-anchor="end">X</text>
+   <text x="${O[0]+6}" y="24" fill="#9AAEC6" font-size="11" font-family="monospace">Y</text>
+   <text x="${sx>0?250:30}" y="${sy>0?32:188}" fill="${c}" font-size="13" font-family="Bricolage Grotesque, sans-serif" font-weight="800" text-anchor="middle">K${['','I','II','III','IV'][q]}</text>
+   <path d="M${O[0]} ${O[1]} L${P[0]} ${P[1]} L${F[0]} ${F[1]} Z" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/>
+   <path d="${sq}" fill="none" stroke="${c}" stroke-width="1.5"/>
+   <path d="M${O[0]+r} ${O[1]} A${r} ${r} 0 ${big} 0 ${ax} ${ay}" fill="none" stroke="#F5B841" stroke-width="2.5"/>
+   <text x="${O[0]+(r+12)*Math.cos(lm)}" y="${O[1]-(r+12)*Math.sin(lm)+4}" fill="#F5B841" font-size="14" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle">α</text>
+   <circle cx="${P[0]}" cy="${P[1]}" r="4" fill="#ECF2F9"/>
+   <text x="${P[0]+sx*6}" y="${P[1]-sy*8+(sy<0?10:0)}" fill="#ECF2F9" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="${sx>0?'start':'end'}">P(x, y)</text>
+   ${yLab}${xLab}${rLab}
+  </svg>`;
+}
+function exT(tag,q,soal,lab,steps){
+  return `<div class="ex tri-ex"><div class="ex-q"><span class="tag">${tag} · dengan segitiga siku-siku</span>${soal}</div>
+  <button class="ex-btn" type="button">Lihat Pembahasan</button>
+  <div class="ex-sol" hidden><div class="ex-tri">${triSVG(q,lab[0],lab[1],lab[2])}<div class="ex-sol">${steps.map(s=>`<div${s.startsWith('#')?' class="hint"':''}>${s.replace(/^#/,'')}</div>`).join('')}</div></div></div></div>`;
+}
+const MAT={
+konsep:()=>`
+ <div class="card"><h3>Kuadran dan Tanda Perbandingan Trigonometri</h3>
+  <p>Bidang koordinat dibagi menjadi empat kuadran. Tanda sin, cos, dan tan bergantung pada letak titik (x, y) di lingkaran: sin θ = y/r, cos θ = x/r, tan θ = y/x.</p>
+  <div class="grid2" style="align-items:center">
+   <div class="quad-mini">
+    <div class="qm" style="background:var(--q2)">Kuadran II<span>90° &lt; θ &lt; 180°<br>sin +</span></div>
+    <div class="qm" style="background:var(--q1)">Kuadran I<span>0° &lt; θ &lt; 90°<br>semua +</span></div>
+    <div class="qm" style="background:var(--q3)">Kuadran III<span>180° &lt; θ &lt; 270°<br>tan +</span></div>
+    <div class="qm" style="background:var(--q4)">Kuadran IV<span>270° &lt; θ &lt; 360°<br>cos +</span></div>
+   </div>
+   <div><p><b>Jembatan keledai:</b> "<b style="color:var(--q1)">Semua</b> <b style="color:var(--q2)">Sindikat</b> <b style="color:var(--q3)">Tangan</b> <b style="color:var(--q4)">Kosong</b>".</p>
+   <p style="color:var(--muted)">Kuadran I semua positif, kuadran II sin positif, kuadran III tan positif, kuadran IV cos positif. Nilai lainnya negatif.</p></div>
+  </div>
+ </div>
+ <div class="card"><h3>Nilai Sudut Istimewa</h3>
+  <p>Hafalkan tabel ini. Semua sudut berelasi akan dikembalikan ke sudut-sudut ini.</p>
+  <div class="tbl-wrap"><table><thead><tr><th>α</th><th>0°</th><th>30°</th><th>45°</th><th>60°</th><th>90°</th></tr></thead>
+  <tbody><tr><td>sin α</td><td>0</td><td>½</td><td>½√2</td><td>½√3</td><td>1</td></tr>
+  <tr><td>cos α</td><td>1</td><td>½√3</td><td>½√2</td><td>½</td><td>0</td></tr>
+  <tr><td>tan α</td><td>0</td><td>⅓√3</td><td>1</td><td>√3</td><td>—</td></tr></tbody></table></div>
+ </div>
+ <div class="card"><h3>Dua Aturan Kunci Sudut Berelasi</h3>
+  <div class="formula">
+   <div class="f"><em>Aturan 1:</em> Relasi dengan 180° atau 360° → fungsi <em>tetap</em> (sin→sin, cos→cos, tan→tan)</div>
+   <div class="f"><em>Aturan 2:</em> Relasi dengan 90° atau 270° → fungsi <em>berubah</em> (sin↔cos, tan↔cot)</div>
+   <div class="f"><em>Tanda:</em> ditentukan oleh kuadran letak sudut <em>hasil</em>, bukan oleh α</div>
+  </div>
+ </div>`,
+k1:()=>`
+ <div class="card" style="border-color:var(--q1)"><h3 style="color:var(--q1)">Kuadran I: Sudut (90° − α)</h3>
+  <p>Jika α lancip, maka (90° − α) juga di kuadran I sehingga semua nilainya positif. Karena relasinya dengan 90°, fungsinya berubah ke kofungsi.</p>
+  <div class="formula">
+   <div class="f">sin (90° − α) = <em class="pos">cos α</em></div>
+   <div class="f">cos (90° − α) = <em class="pos">sin α</em></div>
+   <div class="f">tan (90° − α) = <em class="pos">cot α</em></div>
+  </div>
+  <p style="color:var(--muted)">Dua sudut yang jumlahnya 90° disebut sudut berpenyiku. Contoh: 30° dan 60°, 20° dan 70°.</p>
+ </div>
+ <div class="card"><h3>Contoh Soal</h3>
+  ${ex('Contoh 1','Nyatakan sin 60° dalam kosinus, lalu tentukan nilainya.',['sin 60° = sin (90° − 30°)','        = cos 30°','        = ½√3'])}
+  ${ex('Contoh 2','Diketahui cos 40° = 0,766. Tentukan nilai sin 50°.',['sin 50° = sin (90° − 40°)','        = cos 40°','        = 0,766'])}
+  ${ex('Contoh 3','Sederhanakan: tan 70° × tan 20°.',['tan 70° = tan (90° − 20°) = cot 20°','tan 70° × tan 20° = cot 20° × tan 20°','                  = 1'])}
+  ${exT('Contoh 4',1,'Diketahui α berada di kuadran I dan cos α = p. Tentukan nilai sin α, tan α, dan sin (90° − α).',['y = √(1 − p²)','x = p','r = 1'],['#Kuadran I: x positif, y positif.','cos α = x/r = p/1 → x = p, r = 1','y = √(r² − x²) = √(1 − p²)','sin α = y/r = √(1 − p²)','tan α = y/x = √(1 − p²) / p','sin (90° − α) = cos α = p'])}
+  ${exT('Contoh 5',1,'Diketahui α sudut lancip dan tan α = 3/4. Tentukan nilai sin α dan cos α.',['y = 3','x = 4','r = 5'],['#Kuadran I: semua nilai positif.','tan α = y/x = 3/4 → y = 3, x = 4','r = √(3² + 4²) = √25 = 5','sin α = y/r = 3/5','cos α = x/r = 4/5'])}
+ </div>`,
+k2:()=>`
+ <div class="card" style="border-color:var(--q2)"><h3 style="color:var(--q2)">Kuadran II: Sudut (180° − α) dan (90° + α)</h3>
+  <p>Sudut di kuadran II terletak antara 90° dan 180°. Hanya <b>sin</b> yang bernilai positif.</p>
+  <div class="grid2">
+   <div class="formula">
+    <div class="f">sin (180° − α) = <em class="pos">sin α</em></div>
+    <div class="f">cos (180° − α) = <em class="neg">−cos α</em></div>
+    <div class="f">tan (180° − α) = <em class="neg">−tan α</em></div>
+   </div>
+   <div class="formula">
+    <div class="f">sin (90° + α) = <em class="pos">cos α</em></div>
+    <div class="f">cos (90° + α) = <em class="neg">−sin α</em></div>
+    <div class="f">tan (90° + α) = <em class="neg">−cot α</em></div>
+   </div>
+  </div>
+ </div>
+ <div class="card"><h3>Contoh Soal</h3>
+  ${ex('Contoh 1','Tentukan nilai sin 135°.',['135° di kuadran II → sin positif','sin 135° = sin (180° − 45°)','         = sin 45° = ½√2'])}
+  ${ex('Contoh 2','Tentukan nilai cos 150°.',['150° di kuadran II → cos negatif','cos 150° = cos (180° − 30°)','         = −cos 30° = −½√3'])}
+  ${ex('Contoh 3','Tentukan nilai tan 120° menggunakan relasi (90° + α).',['120° = 90° + 30°, di kuadran II → tan negatif','tan 120° = tan (90° + 30°)','         = −cot 30° = −√3'])}
+  ${exT('Contoh 4',2,'Diketahui α berada di kuadran II dengan sin α = p. Tentukan nilai tan α dan cos α.',['y = p','x = −√(1 − p²)','r = 1'],['#Kuadran II: x negatif, y positif.','sin α = y/r = p/1 → y = p, r = 1','x = −√(r² − y²) = −√(1 − p²)','cos α = x/r = −√(1 − p²)','tan α = y/x = −p / √(1 − p²)'])}
+  ${exT('Contoh 5',2,'Diketahui cos α = −5/13 dan α berada di kuadran II. Tentukan nilai sin α dan tan α.',['y = 12','x = −5','r = 13'],['#Kuadran II: x negatif, y positif.','cos α = x/r = −5/13 → x = −5, r = 13','y = √(13² − 5²) = √144 = 12','sin α = y/r = 12/13','tan α = y/x = 12/(−5) = −12/5'])}
+ </div>`,
+k3:()=>`
+ <div class="card" style="border-color:var(--q3)"><h3 style="color:var(--q3)">Kuadran III: Sudut (180° + α) dan (270° − α)</h3>
+  <p>Sudut di kuadran III terletak antara 180° dan 270°. Hanya <b>tan</b> yang bernilai positif.</p>
+  <div class="grid2">
+   <div class="formula">
+    <div class="f">sin (180° + α) = <em class="neg">−sin α</em></div>
+    <div class="f">cos (180° + α) = <em class="neg">−cos α</em></div>
+    <div class="f">tan (180° + α) = <em class="pos">tan α</em></div>
+   </div>
+   <div class="formula">
+    <div class="f">sin (270° − α) = <em class="neg">−cos α</em></div>
+    <div class="f">cos (270° − α) = <em class="neg">−sin α</em></div>
+    <div class="f">tan (270° − α) = <em class="pos">cot α</em></div>
+   </div>
+  </div>
+ </div>
+ <div class="card"><h3>Contoh Soal</h3>
+  ${ex('Contoh 1','Tentukan nilai sin 210°.',['210° di kuadran III → sin negatif','sin 210° = sin (180° + 30°)','         = −sin 30° = −½'])}
+  ${ex('Contoh 2','Tentukan nilai cos 225°.',['225° di kuadran III → cos negatif','cos 225° = cos (180° + 45°)','         = −cos 45° = −½√2'])}
+  ${ex('Contoh 3','Tentukan nilai tan 240° menggunakan relasi (270° − α).',['240° = 270° − 30°, di kuadran III → tan positif','tan 240° = tan (270° − 30°)','         = cot 30° = √3'])}
+  ${exT('Contoh 4',3,'Diketahui α berada di kuadran III dengan tan α = p (p &gt; 0). Tentukan nilai sin α dan cos α.',['y = −p','x = −1','r = √(1 + p²)'],['#Kuadran III: x negatif, y negatif.','tan α = y/x = p = (−p)/(−1) → y = −p, x = −1','r = √(x² + y²) = √(1 + p²)','sin α = y/r = −p / √(1 + p²)','cos α = x/r = −1 / √(1 + p²)'])}
+  ${exT('Contoh 5',3,'Diketahui sin α = −8/17 dan α berada di kuadran III. Tentukan nilai cos α dan tan α.',['y = −8','x = −15','r = 17'],['#Kuadran III: x negatif, y negatif.','sin α = y/r = −8/17 → y = −8, r = 17','x = −√(17² − 8²) = −√225 = −15','cos α = x/r = −15/17','tan α = y/x = (−8)/(−15) = 8/15'])}
+ </div>`,
+k4:()=>`
+ <div class="card" style="border-color:var(--q4)"><h3 style="color:var(--q4)">Kuadran IV: Sudut (360° − α), (270° + α), dan (−α)</h3>
+  <p>Sudut di kuadran IV terletak antara 270° dan 360°. Hanya <b>cos</b> yang bernilai positif. Sudut negatif (−α) letaknya sama dengan (360° − α).</p>
+  <div class="grid2">
+   <div class="formula">
+    <div class="f">sin (360° − α) = <em class="neg">−sin α</em></div>
+    <div class="f">cos (360° − α) = <em class="pos">cos α</em></div>
+    <div class="f">tan (360° − α) = <em class="neg">−tan α</em></div>
+   </div>
+   <div class="formula">
+    <div class="f">sin (270° + α) = <em class="neg">−cos α</em></div>
+    <div class="f">cos (270° + α) = <em class="pos">sin α</em></div>
+    <div class="f">tan (270° + α) = <em class="neg">−cot α</em></div>
+   </div>
+  </div>
+  <div class="formula"><div class="f">sin (−α) = <em class="neg">−sin α</em> · cos (−α) = <em class="pos">cos α</em> · tan (−α) = <em class="neg">−tan α</em></div></div>
+ </div>
+ <div class="card"><h3>Contoh Soal</h3>
+  ${ex('Contoh 1','Tentukan nilai sin 315°.',['315° di kuadran IV → sin negatif','sin 315° = sin (360° − 45°)','         = −sin 45° = −½√2'])}
+  ${ex('Contoh 2','Tentukan nilai cos 300°.',['300° di kuadran IV → cos positif','cos 300° = cos (360° − 60°)','         = cos 60° = ½'])}
+  ${ex('Contoh 3','Tentukan nilai tan 330° dan cos (−30°).',['tan 330° = tan (360° − 30°) = −tan 30° = −⅓√3','cos (−30°) = cos 30° = ½√3'])}
+  ${exT('Contoh 4',4,'Diketahui α berada di kuadran IV dengan cos α = p. Tentukan nilai sin α dan tan α.',['y = −√(1 − p²)','x = p','r = 1'],['#Kuadran IV: x positif, y negatif.','cos α = x/r = p/1 → x = p, r = 1','y = −√(r² − x²) = −√(1 − p²)','sin α = y/r = −√(1 − p²)','tan α = y/x = −√(1 − p²) / p'])}
+  ${exT('Contoh 5',4,'Diketahui cos α = 7/25 dan α berada di kuadran IV. Tentukan nilai sin α dan tan α.',['y = −24','x = 7','r = 25'],['#Kuadran IV: x positif, y negatif.','cos α = x/r = 7/25 → x = 7, r = 25','y = −√(25² − 7²) = −√576 = −24','sin α = y/r = −24/25','tan α = y/x = −24/7'])}
+ </div>`,
+jelajah:()=>`
+ <div class="card"><h3>Penjelajah Sudut</h3>
+  <p style="color:var(--muted)">Geser slider untuk memutar sudut θ. Perhatikan kuadran, sudut acuan α, dan tanda nilainya.</p>
+  <div class="explorer">
+   <svg viewBox="0 0 300 300" id="uc" role="img" aria-label="Lingkaran satuan"></svg>
+   <div>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span class="big-angle" id="angTxt">150°</span><span class="qpill" id="qPill">Kuadran II</span></div>
+    <div class="slider-row"><label for="angR" class="mono" style="color:var(--muted)">θ</label><input type="range" id="angR" min="0" max="360" step="1" value="150"></div>
+    <div class="presets" id="presets">${[30,45,60,120,135,150,210,225,240,300,315,330].map(a=>`<button type="button" data-a="${a}">${a}°</button>`).join('')}</div>
+    <div class="rel-line" id="relTxt"></div>
+    <div class="vals">
+     <div class="val"><small>sin θ</small><b id="vs"></b></div>
+     <div class="val"><small>cos θ</small><b id="vc"></b></div>
+     <div class="val"><small>tan θ</small><b id="vt"></b></div>
+    </div>
+   </div>
+  </div>
+ </div>`
+};
+function renderMateri(){
+  main.innerHTML=`<div class="view">
+   <div class="view-head"><div class="eyebrow">Menu 2</div><h2>Materi &amp; Contoh Soal</h2>
+   <p>Pilih bagian materi. Setiap kuadran dilengkapi rumus relasi dan contoh soal dengan pembahasan.</p></div>
+   <div class="tabs" role="tablist">${MTABS.map(t=>`<button class="tab" role="tab" data-t="${t[0]}" aria-selected="${t[0]===mtab}">${t[2]?`<span class="dot" style="background:${QC[t[2]]}"></span>`:''}${t[1]}</button>`).join('')}</div>
+   <div id="mbody">${MAT[mtab]()}</div>
+   <div class="qnav" id="mnav"></div>
+  </div>`;
+  main.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{mtab=b.dataset.t;renderMateri();});
+  main.querySelectorAll('.ex-btn').forEach(b=>b.onclick=()=>{const s=b.nextElementSibling;s.hidden=!s.hidden;b.textContent=s.hidden?'Lihat Pembahasan':'Sembunyikan Pembahasan';});
+  const i=MTABS.findIndex(t=>t[0]===mtab), nav=$('#mnav');
+  if(i>0){const p=document.createElement('button');p.className='btn ghost';p.textContent='← '+MTABS[i-1][1];p.onclick=()=>{mtab=MTABS[i-1][0];renderMateri();main.scrollTop=0;};nav.appendChild(p);}
+  if(i<MTABS.length-1){const n=document.createElement('button');n.className='btn';n.textContent=MTABS[i+1][1]+' →';n.onclick=()=>{mtab=MTABS[i+1][0];renderMateri();main.scrollTop=0;};nav.appendChild(n);}
+  else{const n=document.createElement('button');n.className='btn';n.textContent='Lanjut ke Latihan Soal →';n.onclick=()=>go('latihan');nav.appendChild(n);}
+  if(mtab==='jelajah') initExplorer();
+}
+
+/* ---------- PENJELAJAH ---------- */
+const EX={0:['0','1','0'],30:['½','½√3','⅓√3'],45:['½√2','½√2','1'],60:['½√3','½','√3'],90:['1','0','tak terdefinisi']};
+function initExplorer(){
+  const r=$('#angR');
+  r.oninput=()=>drawUC(+r.value);
+  $('#presets').querySelectorAll('button').forEach(b=>b.onclick=()=>{r.value=b.dataset.a;drawUC(+b.dataset.a);});
+  drawUC(+r.value);
+}
+function drawUC(t){
+  const cx=150,cy=150,R=110,rad=t*Math.PI/180,px=cx+R*Math.cos(rad),py=cy-R*Math.sin(rad);
+  let q=0; if(t>0&&t<90)q=1;else if(t>90&&t<180)q=2;else if(t>180&&t<270)q=3;else if(t>270&&t<360)q=4;
+  const col=q?getComputedStyle(document.documentElement).getPropertyValue(['','--q1','--q2','--q3','--q4'][q]).trim():'#F5B841';
+  const large=t>180?1:0;
+  const arc=t===0||t===360?'':`<path d="M${cx+28} ${cy} A28 28 0 ${large} 0 ${cx+28*Math.cos(rad)} ${cy-28*Math.sin(rad)}" fill="none" stroke="#F5B841" stroke-width="2.5"/>`;
+  $('#uc').innerHTML=`
+   <rect x="${cx}" y="${cy-R-12}" width="${R+12}" height="${R+12}" fill="#4FD1A1" opacity="${q===1?.18:.05}"/>
+   <rect x="${cx-R-12}" y="${cy-R-12}" width="${R+12}" height="${R+12}" fill="#F2B33D" opacity="${q===2?.18:.05}"/>
+   <rect x="${cx-R-12}" y="${cy}" width="${R+12}" height="${R+12}" fill="#FF7A6B" opacity="${q===3?.18:.05}"/>
+   <rect x="${cx}" y="${cy}" width="${R+12}" height="${R+12}" fill="#7FA8FF" opacity="${q===4?.18:.05}"/>
+   <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#ECF2F9" stroke-width="1.6"/>
+   <line x1="18" y1="${cy}" x2="282" y2="${cy}" stroke="#9AAEC6"/><line x1="${cx}" y1="18" x2="${cx}" y2="282" stroke="#9AAEC6"/>
+   <text x="286" y="${cy+4}" fill="#9AAEC6" font-size="11" font-family="monospace" text-anchor="end" dy="-8">x</text>
+   <text x="${cx+6}" y="26" fill="#9AAEC6" font-size="11" font-family="monospace">y</text>
+   ${arc}
+   <line x1="${px}" y1="${py}" x2="${px}" y2="${cy}" stroke="#ECF2F9" stroke-dasharray="4 4"/>
+   <line x1="${cx}" y1="${cy}" x2="${px}" y2="${py}" stroke="${col}" stroke-width="4" stroke-linecap="round"/>
+   <circle cx="${px}" cy="${py}" r="7" fill="${col}"/>
+   <circle cx="${cx}" cy="${cy}" r="4" fill="#ECF2F9"/>
+   <text x="${cx+36}" y="${cy-8}" fill="#F5B841" font-size="12" font-family="monospace">θ</text>`;
+  $('#angTxt').textContent=t+'°';
+  const pill=$('#qPill');
+  pill.textContent=q?'Kuadran '+['','I','II','III','IV'][q]:'Pada sumbu';
+  pill.style.background=col;
+  let a,sg,rel;
+  if(q===1){a=t;sg=[1,1,1];rel=`θ = ${t}° (sudut lancip) · semua positif`;}
+  else if(q===2){a=180-t;sg=[1,-1,-1];rel=`θ = 180° − ${a}° · hanya sin positif`;}
+  else if(q===3){a=t-180;sg=[-1,-1,1];rel=`θ = 180° + ${a}° · hanya tan positif`;}
+  else if(q===4){a=360-t;sg=[-1,1,-1];rel=`θ = 360° − ${a}° · hanya cos positif`;}
+  const fmt=(v)=>{const r=Math.round(v*10000)/10000;return (Object.is(r,-0)?0:r).toString().replace('.',',');};
+  let s,c,tn;
+  if(!q){ const m={0:['0','1','0'],90:['1','0','tak terdefinisi'],180:['0','−1','0'],270:['−1','0','tak terdefinisi'],360:['0','1','0']}[t];[s,c,tn]=m;
+    $('#relTxt').textContent=`θ = ${t}° terletak pada sumbu koordinat`; }
+  else{
+    $('#relTxt').textContent=`Sudut acuan α = ${a}° · ${rel}`;
+    if(EX[a]){ const e=EX[a]; const sgn=(k,val)=>(sg[k]<0?'−':'')+val; s=sgn(0,e[0]);c=sgn(1,e[1]);tn=sgn(2,e[2]); }
+    else{ s=fmt(Math.sin(rad));c=fmt(Math.cos(rad));tn=fmt(Math.tan(rad)); s=s.replace('-','−');c=c.replace('-','−');tn=tn.replace('-','−'); }
+  }
+  $('#vs').textContent=s;$('#vc').textContent=c;$('#vt').textContent=tn;
+}
+
+/* ---------- LATIHAN ---------- */
+const QS=[
+ {q:'Nilai sin 150° adalah …',o:['−½','½','½√3','−½√3','½√2'],a:1,k:2,p:['150° di kuadran II → sin positif','sin 150° = sin (180° − 30°) = sin 30° = ½']},
+ {q:'Nilai cos 120° adalah …',o:['½','½√3','−½','−½√3','−½√2'],a:2,k:2,p:['120° di kuadran II → cos negatif','cos 120° = cos (180° − 60°) = −cos 60° = −½']},
+ {q:'sin (90° − α) sama dengan …',o:['sin α','−cos α','tan α','cos α','−sin α'],a:3,k:1,p:['Relasi dengan 90° → fungsi berubah','Kuadran I → positif','sin (90° − α) = cos α']},
+ {q:'Nilai tan 225° adalah …',o:['1','−1','√3','−√3','⅓√3'],a:0,k:3,p:['225° di kuadran III → tan positif','tan 225° = tan (180° + 45°) = tan 45° = 1']},
+ {q:'Nilai sin 300° adalah …',o:['½√3','−½','−½√3','½','−½√2'],a:2,k:4,p:['300° di kuadran IV → sin negatif','sin 300° = sin (360° − 60°) = −sin 60° = −½√3']},
+ {q:'Nilai cos 240° adalah …',o:['−½','½','−½√3','½√3','−½√2'],a:0,k:3,p:['240° di kuadran III → cos negatif','cos 240° = cos (180° + 60°) = −cos 60° = −½']},
+ {q:'Nilai tan 135° adalah …',o:['1','−√3','−1','√3','−⅓√3'],a:2,k:2,p:['135° di kuadran II → tan negatif','tan 135° = tan (180° − 45°) = −tan 45° = −1']},
+ {q:'Nilai cos 330° adalah …',o:['−½√3','½√3','½','−½','½√2'],a:1,k:4,p:['330° di kuadran IV → cos positif','cos 330° = cos (360° − 30°) = cos 30° = ½√3']},
+ {q:'Jika sin α = 3/5 dan α lancip, nilai cos (180° − α) adalah …',o:['4/5','3/5','−3/5','−4/5','−3/4'],a:3,k:2,p:['sin α = 3/5 → sisi depan 3, miring 5, samping 4','cos α = 4/5','cos (180° − α) = −cos α = −4/5']},
+ {q:'Nilai sin 210° + cos 60° adalah …',o:['1','0','−1','½','−½'],a:1,k:3,p:['sin 210° = sin (180° + 30°) = −sin 30° = −½','cos 60° = ½','−½ + ½ = 0']}
+];
+let qi=0,ans=[];
+function renderLatihan(){
+  if(qi>=QS.length) return renderScore();
+  const Q=QS[qi], done=ans[qi]!==undefined;
+  main.innerHTML=`<div class="view">
+   <div class="view-head"><div class="eyebrow">Menu 3</div><h2>Latihan Soal</h2><p>Pilih satu jawaban yang paling tepat. Pembahasan muncul setelah kamu menjawab.</p></div>
+   <div class="card">
+    <div class="progress"><i style="width:${(qi/QS.length)*100}%"></i></div>
+    <div class="qhead"><span>Soal ${qi+1} dari ${QS.length}</span><span><span class="qpill" style="background:${QC[Q.k]};font-size:.75rem">Kuadran ${['','I','II','III','IV'][Q.k]}</span></span></div>
+    <div class="qtext">${Q.q}</div>
+    <div class="opts">${Q.o.map((o,i)=>`<button class="opt" data-i="${i}" ${done?'disabled':''}><span class="lt">${'ABCDE'[i]}</span>${o}</button>`).join('')}</div>
+    <div id="fb"></div>
+    <div class="qnav">${qi>0?'<button class="btn ghost" id="prevQ">← Sebelumnya</button>':''}<button class="btn" id="nextQ" ${done?'':'hidden'}>${qi===QS.length-1?'Lihat Nilai':'Soal Berikutnya →'}</button></div>
+   </div></div>`;
+  if(done) showFb();
+  main.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{ans[qi]=+b.dataset.i;sfx(ans[qi]===QS[qi].a?'ok':'bad');main.querySelectorAll('.opt').forEach(x=>x.disabled=true);showFb();$('#nextQ').hidden=false;});
+  $('#nextQ').onclick=()=>{qi++;renderLatihan();main.scrollTop=0;};
+  const p=$('#prevQ'); if(p) p.onclick=()=>{qi--;renderLatihan();};
+}
+function showFb(){
+  const Q=QS[qi],c=ans[qi]===Q.a;
+  main.querySelectorAll('.opt').forEach(b=>{const i=+b.dataset.i;if(i===Q.a)b.classList.add('correct');else if(i===ans[qi])b.classList.add('wrong');});
+  $('#fb').innerHTML=`<div class="feedback"><b class="${c?'okt':'badt'}">${c?'Benar!':'Belum tepat.'}</b> ${c?'':'Jawaban yang benar adalah '+'ABCDE'[Q.a]+'.'}
+   <div class="ex-sol">${Q.p.map(s=>`<div>${s}</div>`).join('')}</div></div>`;
+}
+function renderScore(){
+  const benar=QS.filter((Q,i)=>ans[i]===Q.a).length, nilai=benar*10;
+  const msg=nilai>=80?'Luar biasa! Kamu sudah menguasai sudut berelasi di keempat kuadran.':nilai>=60?'Bagus! Ulangi materi pada kuadran yang masih keliru.':'Tetap semangat. Pelajari lagi materi dan contoh soal, lalu coba ulang.';
+  main.innerHTML=`<div class="view"><div class="view-head"><div class="eyebrow">Menu 3</div><h2>Hasil Latihan</h2></div>
+   <div class="card score"><div class="num">${nilai}</div><p style="margin-top:8px"><b>${benar} dari ${QS.length}</b> jawaban benar</p>
+   <div class="recap">${QS.map((Q,i)=>`<span style="background:${ans[i]===Q.a?'var(--ok)':'var(--bad)'}">${i+1}</span>`).join('')}</div>
+   <p style="color:var(--muted);max-width:52ch;margin:0 auto 16px">${msg}</p>
+   <div class="qnav" style="justify-content:center"><button class="btn ghost" id="retry">Ulangi Latihan</button><button class="btn" id="toRef">Isi Refleksi →</button></div></div></div>`;
+  sfx(nilai>=60?'fanfare':'bad');
+  $('#retry').onclick=()=>{qi=0;ans=[];renderLatihan();};
+  $('#toRef').onclick=()=>go('refleksi');
+}
+
+/* ---------- REFLEKSI ---------- */
+const lvName={1:'Belum paham',2:'Cukup paham',3:'Sudah paham'};
+let rf={nama:'',kelas:'',lv:{},mudah:'',sulit:'',rencana:''};
+function renderRefleksi(){
+  main.innerHTML=`<div class="view"><div class="view-head"><div class="eyebrow">Menu 4</div><h2>Refleksi Pembelajaran</h2>
+   <p>Jawab dengan jujur. Refleksi membantumu mengetahui bagian mana yang perlu dipelajari lagi.</p></div>
+   <div class="card">
+    <div class="grid2"><div class="field"><label for="rNama">Nama</label><input type="text" id="rNama" value="${rf.nama}"></div>
+    <div class="field"><label for="rKelas">Kelas</label><input type="text" id="rKelas" value="${rf.kelas}" placeholder="contoh: X-3"></div></div>
+   </div>
+   <div class="card"><h3>Seberapa paham kamu?</h3>
+    ${TP.map(t=>`<div class="rf"><p><span class="qpill" style="background:${QC[t[0]]};font-size:.72rem;margin-right:6px">K${['','I','II','III','IV'][t[0]]}</span>Menentukan nilai perbandingan trigonometri sudut berelasi di kuadran ${['','I','II','III','IV'][t[0]]}</p>
+    <div class="lv" data-k="${t[0]}">${[1,2,3].map(v=>`<button type="button" data-v="${v}" aria-pressed="${rf.lv[t[0]]===v}">${lvName[v].split(' ')[0]}</button>`).join('')}</div></div>`).join('')}
+   </div>
+   <div class="card">
+    <div class="field"><label for="rMudah">Bagian materi yang paling mudah kamu pahami:</label><textarea id="rMudah">${rf.mudah}</textarea></div>
+    <div class="field"><label for="rSulit">Bagian yang masih sulit dan mengapa:</label><textarea id="rSulit">${rf.sulit}</textarea></div>
+    <div class="field"><label for="rRencana">Apa yang akan kamu lakukan untuk meningkatkan pemahamanmu?</label><textarea id="rRencana">${rf.rencana}</textarea></div>
+    <button class="btn" id="rSubmit">Lihat Ringkasan Refleksi</button>
+    <div id="rOut"></div>
+   </div></div>`;
+  main.querySelectorAll('.lv').forEach(g=>g.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    rf.lv[g.dataset.k]=+b.dataset.v; g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));}));
+  [['rNama','nama'],['rKelas','kelas'],['rMudah','mudah'],['rSulit','sulit'],['rRencana','rencana']].forEach(([id,k])=>$('#'+id).oninput=e=>rf[k]=e.target.value);
+  $('#rSubmit').onclick=()=>{
+    const out=$('#rOut');
+    if(!rf.nama.trim()||Object.keys(rf.lv).length<4){out.innerHTML='<p class="error">Isi nama dan pilih tingkat pemahaman untuk keempat kuadran terlebih dahulu.</p>';return;}
+    sfx('fanfare');
+    const lemah=TP.filter(t=>rf.lv[t[0]]<3).map(t=>'Kuadran '+['','I','II','III','IV'][t[0]]);
+    const skor=QS.length&&ans.length?QS.filter((Q,i)=>ans[i]===Q.a).length*10:null;
+    out.innerHTML=`<div class="summary"><h3>Ringkasan Refleksi</h3>
+     <p><b>${esc(rf.nama)}</b>${rf.kelas?' · Kelas '+esc(rf.kelas):''}${skor!==null?' · Nilai latihan: <b>'+skor+'</b>':''}</p>
+     <ul>${TP.map(t=>`<li>Kuadran ${['','I','II','III','IV'][t[0]]}: <b>${lvName[rf.lv[t[0]]]}</b></li>`).join('')}</ul>
+     ${rf.mudah?`<p><b>Mudah:</b> ${esc(rf.mudah)}</p>`:''}${rf.sulit?`<p><b>Masih sulit:</b> ${esc(rf.sulit)}</p>`:''}${rf.rencana?`<p><b>Rencana:</b> ${esc(rf.rencana)}</p>`:''}
+     <p style="color:var(--muted);margin:0">${lemah.length?'Saran: pelajari ulang materi '+lemah.join(', ')+' dan gunakan Penjelajah Sudut.':'Hebat! Kamu siap melanjutkan ke materi berikutnya.'}</p></div>`;
+  };
+}
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+})();
+</script>
+
+</body></html>
